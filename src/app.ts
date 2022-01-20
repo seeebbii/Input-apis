@@ -45,5 +45,4 @@ io.on("connection", (socket) => {
     // STORING SOCKET DETAILS ON CONNECTION AND DISCONNECTION
     handleHistoryRelatedEvents(socket);
 
-
 });
