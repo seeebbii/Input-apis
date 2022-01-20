@@ -31,10 +31,11 @@ app.use(express.json({ limit: '1000mb' }));
 mongoose.connect(process.env.MONGO_URI || mongoUri, { useNewUrlParser: true } as mongoose.ConnectOptions).then(() => console.log('MongoDb Connected')).catch((err) => console.log(err));
 const httpServer = app.listen(process.env.PORT, () => console.log(`Server running on port: ${process.env.PORT}`))
 
-const io = new socketio.Server(httpServer);
+const io = new socketio.Server(httpServer, { allowEIO3: true } as socketio.ServerOptions);
 
 
 io.on("connection", (socket) => {
+    console.log("Socket Connected: ", socket.id);
 
     // HANDLING CONNECTION STATUS EVENTS
     // WHEN A SOCKET IS CONNECTED OR DISCONNECTED TO SERVER
