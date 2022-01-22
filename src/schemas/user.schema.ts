@@ -4,8 +4,13 @@ const UserSchema = mongoose.Schema;
 const user = new UserSchema({
     
     name: String,
-    totalMessages: Number,
+    secret: String,
+    ipAddress: String,
+    userCreatedAt: Date,
+
 
 },  { timestamps: true })
 
-export default  mongoose.model('UserSchema', user);
+const UserSchemaInstance = mongoose.model('UserSchema', user);
+
+export default UserSchemaInstance;

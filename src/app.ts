@@ -6,9 +6,11 @@ import mongoose from 'mongoose';
 import mongoUri from './service/uri';
 
 // ! IMPORTING DB CONTROLLERS
-import { AddHistoryObject } from './controller/history.controller';
 import { handleHistoryRelatedEvents } from './events/history.event';
 import { handleConnectionStatusEvents } from './events/connectionStatus.event';
+
+// ! IMPORTING APPLICATION ROUTES
+import userRoutes from './routes/user.routes';
 
 const app = express();
 dotenv.config();
@@ -46,3 +48,6 @@ io.on("connection", (socket) => {
     handleHistoryRelatedEvents(socket);
 
 });
+
+//! SETTING UP ROUTES
+app.use('/user', userRoutes);
