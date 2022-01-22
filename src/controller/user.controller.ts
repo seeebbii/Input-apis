@@ -2,13 +2,14 @@ import UserSchemaInstance from '../schemas/user.schema';
 import {Request, Response, NextFunction} from 'express';
 
 export const checkIfUserExists = (req : Request, res : Response, next: NextFunction) => {
-
+    var clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
     UserSchemaInstance.findOne({secret: req.body.secret}).then((user) => {
         if(user){
-            res.status(400).json(user);
+            UserSchemaInstance.updateOne({secret: req.body.secret},{"ipAddress": clientIp} ).then((updatedUser) => {
+                res.status(400).json(updatedUser);
+            })
         }else{
-            var clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
-            UserSchemaInstance.find({}).then((totalUsers: Array<typeof UserSchemaInstance>) => {
+             UserSchemaInstance.find({}).then((totalUsers: Array<typeof UserSchemaInstance>) => {
                 const newUser = new UserSchemaInstance({
                     name: `Spyder ${totalUsers.length}`,
                     secret: req.body.secret,
