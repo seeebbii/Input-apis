@@ -1,5 +1,5 @@
 import express from 'express';
-import {checkIfUserExists} from '../controller/user.controller'
+import {checkIfUserExists, getUserById } from '../controller/user.controller'
 const router = express.Router();
 
 
@@ -10,6 +10,7 @@ router.get('/', (req, res)=>{
 })
 
 router.post('/', checkIfUserExists);
+router.get('/:id', getUserById);
 
 
 

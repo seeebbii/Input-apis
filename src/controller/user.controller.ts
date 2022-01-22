@@ -34,3 +34,25 @@ export const checkIfUserExists = (req : Request, res : Response, next: NextFunct
     })
 
 }
+
+
+export const getUserById = (req : Request, res : Response, next: NextFunction) => {
+    var clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
+    UserSchemaInstance.findById(req.params.id).then((user) => {
+        if(user){
+            user.ipAddress = clientIp;
+            UserSchemaInstance.updateOne({_id: req.params.id},{"ipAddress": clientIp} ).then((updatedUser) => {
+                res.status(200).json(user);
+            })
+        }else{
+            res.status(404).json({
+                message: "User not found"
+            })
+        }
+    }).catch((err) => {
+        res.status(404).json({
+            message: "Something went wrong",
+            error: err
+        })
+    })
+}
