@@ -7,7 +7,7 @@ export const checkIfUserExists = (req : Request, res : Response, next: NextFunct
         if(user){
             user.ipAddress = clientIp;
             UserSchemaInstance.updateOne({secret: req.body.secret},{"ipAddress": clientIp} ).then((updatedUser) => {
-                res.status(400).json(user);
+                res.status(200).json(user);
             })
         }else{
              UserSchemaInstance.find({}).then((totalUsers: Array<typeof UserSchemaInstance>) => {
