@@ -5,8 +5,9 @@ export const checkIfUserExists = (req : Request, res : Response, next: NextFunct
     var clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
     UserSchemaInstance.findOne({secret: req.body.secret}).then((user) => {
         if(user){
+            user.ipAddress = clientIp;
             UserSchemaInstance.updateOne({secret: req.body.secret},{"ipAddress": clientIp} ).then((updatedUser) => {
-                res.status(400).json(updatedUser);
+                res.status(400).json(user);
             })
         }else{
              UserSchemaInstance.find({}).then((totalUsers: Array<typeof UserSchemaInstance>) => {
