@@ -1,6 +1,35 @@
 import UserSchemaInstance from '../schemas/user.schema';
 import {Request, Response, NextFunction} from 'express';
 
+
+const romanize = (original: number): string => {
+    if (original < 1 || original > 3999) {
+      throw new Error('Error: Input integer limited to 1 through 3,999');
+    }
+  
+    const numerals = [
+      ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'], // 1-9
+      ['X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC'], // 10-90
+      ['C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM'], // 100-900
+      ['M', 'MM', 'MMM'], // 1000-3000
+    ];
+
+    const digits = Math.round(original).toString().split('');
+    let position = (digits.length - 1);
+  
+    return digits.reduce((roman, digit) => {
+      if (digit !== '0') {
+        roman += numerals[position][parseInt(digit) - 1];
+      }
+  
+      position -= 1;
+  
+      return roman;
+    }, '');
+  }
+
+
+
 export const checkIfUserExists = (req : Request, res : Response, next: NextFunction) => {
     var clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
     UserSchemaInstance.findOne({secret: req.body.secret}).then((user) => {
@@ -11,8 +40,15 @@ export const checkIfUserExists = (req : Request, res : Response, next: NextFunct
             })
         }else{
              UserSchemaInstance.find({}).then((totalUsers: Array<typeof UserSchemaInstance>) => {
+                var romanizedLenght: Number | String = 0;
+                if(totalUsers.length == 0){
+                    romanizedLenght = 0;
+                }else{
+                    romanizedLenght = romanize(totalUsers.length)
+                }
+
                 const newUser = new UserSchemaInstance({
-                    name: `Spyder ${totalUsers.length}`,
+                    name: `Spyder ${romanizedLenght}`,
                     secret: req.body.secret,
                     ipAddress: clientIp,
                     userCreatedAt: new Date()
