@@ -50,7 +50,7 @@ io.on("connection", (socket) => {
     // WHEN A SOCKET IS CONNECTED OR DISCONNECTED TO SERVER
     handleConnectionStatusEvents(socket, io);
 
-    socket.emit("newUser", { "message": "Fetch Active Users" });
+    // io.emit("newUser", { "message": "Fetch Active Users" });
 
     // HANDLING HISTORY EVENTS
     // STORING SOCKET DETAILS ON CONNECTION AND DISCONNECTION
