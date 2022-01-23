@@ -3,9 +3,16 @@ const ChatSchema = mongoose.Schema;
 
 const chat = new ChatSchema({
 
-    
+    userId: String, 
+    name: String,
+    message: String,
+    sentDate: {
+        type: Date,
+        default: Date.now()
+    }
 
 }, {timestamps: true});
 
+const ChatSchemaInstance = mongoose.model('ChatSchema', chat);
 
-export default  mongoose.model('ChatSchema', chat);
+export default ChatSchemaInstance;

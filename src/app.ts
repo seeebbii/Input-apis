@@ -9,8 +9,13 @@ import mongoUri from './service/uri';
 import { handleHistoryRelatedEvents } from './events/history.event';
 import { handleConnectionStatusEvents } from './events/connectionStatus.event';
 
+
+// ! IMPORTING CHAT CONTROLLER
+import { addChatObject } from './controller/chat.controller';
+
 // ! IMPORTING APPLICATION ROUTES
 import userRoutes from './routes/user.routes';
+import ChatSchemaInstance from './schemas/chat.schema';
 
 const app = express();
 dotenv.config();
@@ -38,14 +43,31 @@ const io = new socketio.Server(httpServer, { allowEIO3: true } as socketio.Serve
 
 io.on("connection", (socket) => {
     console.log("Socket Connected: ", socket.id);
+    
 
     // HANDLING CONNECTION STATUS EVENTS
     // WHEN A SOCKET IS CONNECTED OR DISCONNECTED TO SERVER
     handleConnectionStatusEvents(socket, io);
 
+    socket.emit("newUser", { "message": "Fetch Active Users" });
+
     // HANDLING HISTORY EVENTS
     // STORING SOCKET DETAILS ON CONNECTION AND DISCONNECTION
     handleHistoryRelatedEvents(socket);
+
+    socket.on("chatMessage", (chatModel) =>{
+
+        const newChatObject = new ChatSchemaInstance({
+            userId: chatModel.userId,
+            name: chatModel.name,
+            message: chatModel.message,
+            sentDate: Date.now()
+        });
+        console.log( chatModel)
+        io.emit('newChatMessage', newChatObject.toJSON());
+        
+        addChatObject(chatModel);
+    })
 
 });
 
