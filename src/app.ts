@@ -16,6 +16,7 @@ import { addChatObject } from './controller/chat.controller';
 // ! IMPORTING APPLICATION ROUTES
 import userRoutes from './routes/user.routes';
 import ChatSchemaInstance from './schemas/chat.schema';
+import chatRoutes from './routes/chat.routes';
 
 const app = express();
 dotenv.config();
@@ -55,16 +56,17 @@ io.on("connection", (socket) => {
     // STORING SOCKET DETAILS ON CONNECTION AND DISCONNECTION
     handleHistoryRelatedEvents(socket);
 
-    socket.on("chatMessage", (chatModel) =>{
+    socket.on("receive_message", (chatModel) =>{
 
         const newChatObject = new ChatSchemaInstance({
             userId: chatModel.userId,
             name: chatModel.name,
             message: chatModel.message,
-            sentDate: Date.now()
+            messagId: chatModel.messagId,
+            ssentDate: chatModel.sentDate,
         });
         console.log( chatModel)
-        io.emit('newChatMessage', newChatObject.toJSON());
+        io.emit('send_message', newChatObject.toJSON());
         
         addChatObject(chatModel);
     })
@@ -73,3 +75,4 @@ io.on("connection", (socket) => {
 
 //! SETTING UP ROUTES
 app.use('/user', userRoutes);
+app.use('/chat', chatRoutes);

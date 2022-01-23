@@ -6,6 +6,7 @@ const chat = new ChatSchema({
     userId: String, 
     name: String,
     message: String,
+    messageId: String,
     sentDate: {
         type: Date,
         default: Date.now()
