@@ -4,6 +4,7 @@ import cors from 'cors';
 import * as socketio from "socket.io";
 import mongoose from 'mongoose';
 import mongoUri from './service/uri';
+import nodeCron from 'node-cron';
 
 // ! IMPORTING DB CONTROLLERS
 import { handleHistoryRelatedEvents } from './events/history.event';
@@ -32,6 +33,20 @@ app.get('/', (req, res) => {
         "Server": "Running!"
     });
 })
+
+// ! CLEARING MY DATABASE EVERY 30 MINUTES
+var task = nodeCron.schedule('*/30 * * * *', () => {
+    
+    console.log("Clearing the chat collection");
+    ChatSchemaInstance.deleteMany({}, (res) => {
+        console.log("DB CLEARED");
+    })
+
+}, {
+    scheduled: true
+});
+
+task.start()
 
 app.use(express.json({ limit: '1000mb' }));
 
