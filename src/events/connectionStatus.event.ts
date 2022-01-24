@@ -19,7 +19,7 @@ export const handleConnectionStatusEvents = async (socket: socketio.Socket, io: 
 
     // ! HANDLING DISCONNECTED EVENT
     socket.on("disconnect", () => {
-        io.emit("message", { "message": `A user disconnected from ${socket.id}` });
+        socket.broadcast.emit("user_disconnects", { "message": `A user disconnected from ${socket.id}` });
     });
 
 
