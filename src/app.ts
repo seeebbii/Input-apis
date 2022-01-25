@@ -97,7 +97,7 @@ io.on("connection", (socket) => {
     socket.on("new-user", (val) => {
         HistorySchemaInstance.findOne({ socketId:socket.id }, (err: any, history: any) => {
             console.log(history)
-            socket.broadcast.emit("connected", { "activeUser": history });
+            socket.broadcast.emit("listen-new-user", { "activeUser": history });
         })
     })
 
