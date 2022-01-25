@@ -12,15 +12,16 @@ export const handleConnectionStatusEvents = async (socket: socketio.Socket, io: 
     // ! GETTING LAST 15 ENTRIES OF CHAT FROM DB
 
     const oldChhat = await  ChatSchemaInstance.find().sort({ createdAt: -1 }).limit(15).then((docs) =>docs);
-    console.log(oldChhat)
     // ! HANDLING CONNTED EVENT
     socket.emit("connection", { "Status": "Connected", "Socket-Id": socket.id, "old-chat":  oldChhat});
 
 
+    
+
     // ! HANDLING DISCONNECTED EVENT
-    socket.on("disconnect", () => {
-        socket.broadcast.emit("user_disconnects", { "message": `A user disconnected from ${socket.id}` });
-    });
+    // socket.on("disconnect", () => {
+    //     socket.broadcast.emit("user_disconnects", { "message": `A user disconnected from ${socket.id}` });
+    // });
 
 
 }

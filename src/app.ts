@@ -59,6 +59,11 @@ const io = new socketio.Server(httpServer, { allowEIO3: true } as socketio.Serve
 
 io.on("connection", (socket) => {
     console.log("Socket Connected: ", socket.id);
+
+    socket.on("disconnect", () => {
+        socket.broadcast.emit("disconncted", { "socket-id": socket.id });
+    });
+
     
 
     // HANDLING CONNECTION STATUS EVENTS
@@ -80,7 +85,7 @@ io.on("connection", (socket) => {
             messagId: chatModel.messagId,
             ssentDate: chatModel.sentDate,
         });
-        console.log( chatModel)
+    
         io.emit('send_message', newChatObject.toJSON());
         
         addChatObject(chatModel);
