@@ -6,6 +6,11 @@ export const handleHistoryRelatedEvents = (socket: socketio.Socket) => {
 
     // ! HANDLING CONNTED EVENT
     socket.on("socket-connection-success", ({ socketId, connectionStatus, userName, userId }) => {
+        socket.broadcast.emit("listen-new-user", {
+            "userName": userName,
+            "socketId": socketId,
+            "userId": userId,
+         });
         addHistoryObject(socketId, connectionStatus, userName, userId);
     });
 

@@ -94,12 +94,12 @@ io.on("connection", (socket) => {
 
     
     // ! HITING NEW USER EVENT TO GET BROADCAST OF NEW USER IN CHAT
-    socket.on("new-user", (val) => {
-        HistorySchemaInstance.findOne({ socketId:socket.id }, (err: any, history: any) => {
-            console.log(history)
-            socket.broadcast.emit("listen-new-user", { "activeUser": history });
-        })
-    })
+    // socket.on("new-user", (val) => {
+    //     HistorySchemaInstance.findOne({ socketId:socket.id }, (err: any, history: any) => {
+    //         console.log(history)
+            
+    //     })
+    // })
 
     
 
