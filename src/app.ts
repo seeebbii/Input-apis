@@ -92,13 +92,14 @@ io.on("connection", (socket) => {
     })
 
 
-    // ! FINDING AND BROADCAST A NEW USER 
-    HistorySchemaInstance.findOne({ socketId:socket.id }, (err: any, history: any) => {
-        console.log(history)
-        socket.broadcast.emit("connected", { "activeUser": history });
+    
+    // ! HITING NEW USER EVENT TO GET BROADCAST OF NEW USER IN CHAT
+    socket.on("new-user", (val) => {
+        HistorySchemaInstance.findOne({ socketId:socket.id }, (err: any, history: any) => {
+            console.log(history)
+            socket.broadcast.emit("connected", { "activeUser": history });
+        })
     })
-
-
 
     
 
