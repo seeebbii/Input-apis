@@ -64,18 +64,7 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         socket.broadcast.emit("disconncted", { "socket-id": socket.id });
-    });
-
-    HistorySchemaInstance.findOne({ socketId: socket.id }, (history: any) => {
-        socket.broadcast.emit("connected", { "activeUser": history });
-    })
-
-    
-
-
-    
-
-    
+    });    
 
     // HANDLING CONNECTION STATUS EVENTS
     // WHEN A SOCKET IS CONNECTED OR DISCONNECTED TO SERVER
@@ -100,6 +89,11 @@ io.on("connection", (socket) => {
         io.emit('send_message', newChatObject.toJSON());
         
         addChatObject(chatModel);
+    })
+
+    HistorySchemaInstance.findOne({ socketId: socket.id }, (history: any) => {
+        console.log(history)
+        socket.broadcast.emit("connected", { "activeUser": history });
     })
 
 });
