@@ -18,6 +18,7 @@ import { addChatObject } from './controller/chat.controller';
 import userRoutes from './routes/user.routes';
 import ChatSchemaInstance from './schemas/chat.schema';
 import chatRoutes from './routes/chat.routes';
+import HistorySchemaInstance from './schemas/history.schema';
 
 const app = express();
 dotenv.config();
@@ -57,12 +58,15 @@ const httpServer = app.listen(process.env.PORT, () => console.log(`Server runnin
 const io = new socketio.Server(httpServer, { allowEIO3: true } as socketio.ServerOptions);
 
 
+
 io.on("connection", (socket) => {
     console.log("Socket Connected: ", socket.id);
 
     socket.on("disconnect", () => {
         socket.broadcast.emit("disconncted", { "socket-id": socket.id });
     });
+
+    
 
     
 
