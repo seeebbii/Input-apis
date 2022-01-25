@@ -66,6 +66,13 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("disconncted", { "socket-id": socket.id });
     });
 
+    HistorySchemaInstance.findOne({ socketId: socket.id }, (history: any) => {
+        socket.broadcast.emit("connected", { "activeUser": history });
+    })
+
+    
+
+
     
 
     
